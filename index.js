@@ -6,6 +6,7 @@ const flash = require('express-flash')
 
 // Import Routes
 const toughtsRoutes = require('./routes/toughtsRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 const app = express()
 
@@ -73,6 +74,9 @@ app.use((req, res, next) => {
 
 //* Routes
 app.use('/toughts', toughtsRoutes)
+app.use('/', authRoutes)
+
+// Main Route
 app.get('/', ToughtController.showToughts)
 
 conn
