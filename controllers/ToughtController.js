@@ -1,10 +1,47 @@
 const Tought = require("../models/Tought");
 const User = require("../models/User");
 
+
+const { Op }  = require('sequelize')
+
 module.exports = class ToughtController {
+
   // Mostra todos os pensamentos
   static async showToughts(req, res) {
-    res.render("toughts/home");
+
+    let search = ""
+
+    if(req.query.search) {
+      search = req.query.search
+    }
+
+    let order = 'DESC'
+
+    if(req.query.order === "old") {
+      order = "ASC"
+    } else {
+      order = 'DESC'
+    }
+
+    const toughtsData = await Tought.findAll({
+      include: User,
+      where: {
+        title: { [Op.like]: `%${search}%` },
+      },
+      order: [['createdAt', order]]
+    })
+
+    // busca os toughts e o User (nome do usuario no model User) e insere no mesmo array
+    const toughts = toughtsData.map((result) => result.get({plain: true}));
+  
+    let toughtsQty = toughts.length
+
+    if(toughtsQty === 0) {
+      toughtsQty = false
+    }
+
+
+    res.render("toughts/home", { toughts, search, toughtsQty });
   }
 
   // renderiza a dashboard do usuario
@@ -23,14 +60,18 @@ module.exports = class ToughtController {
       res.redirect("toughts/login");
     }
 
-    const toughts = user.Toughts.map((results) => results.dataValues);
-
+    
+    const toughts = user.Toughts.map((result) => result.dataValues)
+    console.log(toughts)
     // validação caso não tenha pensamento na dahsboard
-    let emptyToughts = false;
+    let emptyToughts = true;
 
-    if (toughts.length === 0) {
-      emptyToughts = true;
+    if(toughts.length > 0) {
+      emptyToughts = false
     }
+
+
+
 
     res.render("toughts/dashboard", { toughts, emptyToughts });
   }
