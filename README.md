@@ -18,6 +18,15 @@ Suas funcionalidades são:
   
   Ambas acima passam por autenticação no banco de dados e também via session, que fica armazenado no cache do navegador,
   
+ Com os Toughts possuindo as seguintes funcionalidades:
+ 
+  - Criação
+  - Leitura
+  - Edição
+  - Remoção
+  
+ ==============
+ 
   Após feita a autenticação o usuário pode inserir seus Toughts! 
   Cada usuário conta com uma dashboard onde pode inserir novos Toughts, editar os Toughts já inseridos, ou excluir algum, caso seja sua vontade.
   
